@@ -24,7 +24,7 @@
     (if (empty? dirs)
       files 
       (recur
-             (concat (rest dirs) (get-directories (first dirs))) 
+             (concat (get-directories (first dirs)) (rest dirs)) 
              (concat files (get-files (first dirs)))
        )
 )))
