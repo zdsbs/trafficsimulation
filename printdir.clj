@@ -1,35 +1,17 @@
 (:import 'java.io.File)
 
+(use 'clojure.contrib.find-namespaces)
+
 (def current-dir (new java.io.File "./trafficsimulation/org"))
 
-(defn get-directories [file] 
-  (if (nil? file)
-   []
-   (filter #(. % isDirectory) (. file listFiles)))
-)
+(defn is-test-file? [file]
+	(not (nil? (re-find #"test$" (. file getName)))))
 
-(defn get-files [file]
-  (if (nil? file)
-    []
-   (filter #(. % isFile) (. file listFiles))))
+(defn find-test-namespaces [file]
+	(filter is-test-file? (find-namespaces-in-dir file)))
 
-(defn print-path [files]
-  (doseq [file files] 
-    (if (not (nil? file))
-     (println (. file getPath)))))
-
-
-(defn get-all-files [file]
-  (loop [dirs [file] files []]
-    (if (empty? dirs)
-      files 
-      (recur
-             (concat (rest dirs) (get-directories (first dirs))) 
-             (concat files (get-files (first dirs)))
-       )
-)))
-
-(println "ALL FILES")
-(print-path (get-all-files current-dir))
+(println "ALL TEST FILES")
+(doseq [file (find-test-namespaces current-dir)]
+	(println file))
 
 
