@@ -6,8 +6,6 @@
 
 (def road {:length 1000 :width 14})
 
-(def cars [])
-
 (defn get-car-tail-position [{:keys [position length]}]
 	(- position length))
 
@@ -18,16 +16,27 @@
 (defn get-car-new-position [car]
 	(assoc car :position (get-new-car-head-position car)))
 
-(defn get-all-cars-new-positions [input-cars]
-	(map get-car-new-position input-cars))
+(defn keep-car? [car]
+	(<= (get-car-tail-position car) (road :length)))
 
+(defn get-all-cars-new-positions [input-cars]
+	(filter keep-car? (map get-car-new-position input-cars)))
+
+
+
+(def tick-stack (ref ()))
+
+(dosync (alter tick-stack conj [(struct car 15 1 0)]))
+
+(defn add-frame [tick-frame]
+	(dosync (alter tick-stack conj tick-frame)))
+
+(dotimes [tick 10] 
+	(add-frame (get-all-cars-new-positions (last @tick-stack))))
 
 
 (defn add-cars [car-head-positions]
 	; if some criteria
 	; (assoc car-head-positions (struct car 15 1) 0)
 )
-
-
-
 

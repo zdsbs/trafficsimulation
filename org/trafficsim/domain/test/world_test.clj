@@ -13,7 +13,13 @@
 (deftest move-car
 	(is (= (struct car 15 1 5) (get-car-new-position (struct car 15 1 4)))))
 
+(deftest car-off-end-of-road
+	(is (keep-car? (struct car 15 1 1014)))
+	(is (keep-car? (struct car 15 1 1015)))
+	(is (not (keep-car? (struct car 15 1 1016)))))
+
 (deftest move-all-cars
 	(is (= [] (get-all-cars-new-positions [])))
 	(is (= [(struct car 15 1 5)] (get-all-cars-new-positions [(struct car 15 1 4)])))
-	(is (= [(struct car 15 1 5)  (struct car 15 1 10)] (get-all-cars-new-positions [(struct car 15 1 4)  (struct car 15 1 9)]))))
+	(is (= [(struct car 15 1 5)  (struct car 15 1 10)] (get-all-cars-new-positions [(struct car 15 1 4)  (struct car 15 1 9)])))
+	(is (= [(struct car 15 1 5)] (get-all-cars-new-positions [(struct car 15 1 4)  (struct car 15 20 999)]))))
