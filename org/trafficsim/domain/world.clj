@@ -32,11 +32,13 @@
 	(dosync (alter tick-stack conj tick-frame)))
 
 (dotimes [tick 10] 
-	(add-frame (get-all-cars-new-positions (last @tick-stack))))
+	(add-frame (get-all-cars-new-positions (first @tick-stack))))
 
 
 (defn add-cars [car-head-positions]
 	; if some criteria
 	; (assoc car-head-positions (struct car 15 1) 0)
 )
+
+;(println @tick-stack)
 
