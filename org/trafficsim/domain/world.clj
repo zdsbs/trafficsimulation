@@ -6,6 +6,19 @@
 
 (def road {:length 1000 :width 14})
 
+
+;(defn foo [[name length position] [name length position]]
+;	[]
+;)
+
+(defn sort-cars-by-position [cars]
+	(sort-by :position cars))
+
+(defn distance-between-two-cars [car1 car2]
+	(- (:position car2) (:position car1)))
+
+
+
 (defn get-car-tail-position [{:keys [position length]}]
 	(- position length))
 

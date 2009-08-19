@@ -2,22 +2,20 @@
 
 (def IN-FRONT (. Integer MAX_VALUE))
 
-(defstruct behavior :accel-dist :decel-dist :target-speed)
-(defstruct car :length :speed :position :acc-behavior :braking-behavior :max-speed-behavior)
+(defstruct behavior :accel-dist :decel-dist)
+(defstruct car :name :position :length :speed :behavior)
 
-(defn brake [dec name cur-speed]
-	[name (- cur-speed dec)]
-)
+(defn brake [dec {:keys [speed] :as car}]
+	(- speed dec))
 
-(defn accel [acc name cur-speed]
-	[name (+ cur-speed acc)])
+(defn accel [accel {:keys [speed] :as car}]
+	(+ speed accel))
 
-(defn speed-change [[behavior name speed distance]]
+(defn speed-change [{:keys [behavior speed] :as car} distance]
 	(cond 
-		(< distance (:decel-dist behavior)) (brake 1 name speed)
-		(> distance (:accel-dist behavior)) (accel 1 name speed)
-		:else [name speed]
-		))
+		(< distance (:decel-dist behavior)) (brake 1 car)
+		(> distance (:accel-dist behavior)) (accel 1 car)
+		:else speed))
 
-(defn collect-all-new-speed-changes [braking-data] 
-	(map speed-change braking-data))
+(defn all-speed-changes [cars distances]
+	(map speed-change cars distances))
