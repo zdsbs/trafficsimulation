@@ -6,34 +6,47 @@
 
 (def road {:length 1000 :width 14})
 
+(defn apply-new-speed [car new-speed]
+	(assoc car :speed new-speed))
 
-;(defn foo [[name length position] [name length position]]
-;	[]
-;)
+(defn apply-new-speeds [cars new-speeds]
+	(map apply-new-speed cars new-speeds))
+
+(defn pair [inums]
+	(if (= 1 (count inums))
+		[]
+		(loop [nums inums pairs []]
+			(if (= 2 (count nums))
+				(conj pairs [(nums 0) (nums 1)])
+				(recur (subvec nums 1) (conj pairs [(nums 0) (nums 1)]))))))
+
+
 
 (defn sort-cars-by-position [cars]
 	(sort-by :position cars))
 
-(defn distance-between-two-cars [car1 car2]
-	(- (:position car2) (:position car1)))
-
-
+(defn distance-between-two-cars [[car1 car2]]
+	(if (nil? car2)
+		IN-FRONT
+		(- (:position car1) (:position car2))))
 
 (defn get-car-tail-position [{:keys [position length]}]
 	(- position length))
+
+
 
 ;position after the next tick
 (defn get-new-car-head-position [{:keys [speed position]}]
 	(+ position speed))
 
-(defn get-car-new-position [car]
+(defn move-car [car]
 	(assoc car :position (get-new-car-head-position car)))
 
 (defn keep-car? [car]
 	(<= (get-car-tail-position car) (road :length)))
 
-(defn get-all-cars-new-positions [input-cars]
-	(filter keep-car? (map get-car-new-position input-cars)))
+(defn move-all-cars [input-cars]
+	(filter keep-car? (map move-car input-cars)))
 
 
 
@@ -45,7 +58,7 @@
 	(dosync (alter tick-stack conj tick-frame)))
 
 (dotimes [tick 10] 
-	(add-frame (get-all-cars-new-positions (first @tick-stack))))
+	(add-frame (move-all-cars (first @tick-stack))))
 
 
 (defn add-cars [car-head-positions]
