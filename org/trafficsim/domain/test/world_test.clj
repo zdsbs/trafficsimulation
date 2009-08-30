@@ -33,21 +33,16 @@
 	(is (= IN-FRONT (distance-between-two-cars [(car-with :position 1) nil])))
 	(is (= 2 (distance-between-two-cars [(car-with :position 3) (car-with :position 1)]))))
 
-(deftest pair-test
-	(is (= [] (pair [1])))
-	(is (= [[1 2]] (pair [1 2])))
-	(is (= [[1 2] [2 3]] (pair [1 2 3])))
-	(is (= [[1 2] [2 3] [3 4]] (pair [1 2 3 4]))))
-
-(defn 
-	#^{:doc "takes a set of pairs of cars, sorted, leader to the left"}
-	distances-between-cars [car-pairs]
-		(cons IN-FRONT (map distance-between-two-cars car-pairs)))
+(deftest ordered-car-pair-test
+	(is (= [] (ordered-car-pair [1])))
+	(is (= [[1 2]] (ordered-car-pair [1 2])))
+	(is (= [[1 2] [2 3]] (ordered-car-pair [1 2 3])))
+	(is (= [[1 2] [2 3] [3 4]] (ordered-car-pair [1 2 3 4]))))
 
 (deftest distances-between-cars-test
-	(is (= [IN-FRONT] (distances-between-cars (pair [(car-with :position 1)]))))
-	(is (= [IN-FRONT 3] (distances-between-cars (pair [(car-with :position 100) (car-with :position 97)]))))
-	(is (= [IN-FRONT 3 4] (distances-between-cars (pair [(car-with :position 100) (car-with :position 97) (car-with :position 93)]))))
+	(is (= [IN-FRONT] (distances-between-cars (ordered-car-pair [(car-with :position 1)]))))
+	(is (= [IN-FRONT 3] (distances-between-cars (ordered-car-pair [(car-with :position 100) (car-with :position 97)]))))
+	(is (= [IN-FRONT 3 4] (distances-between-cars (ordered-car-pair [(car-with :position 100) (car-with :position 97) (car-with :position 93)]))))
 )
 
 
