@@ -20,3 +20,18 @@
 	(def cars2 (simulation-tick cars1))
 	(is (= cars-should-be cars2)))
 
+(deftest run-sim-1-tick
+	(def cars-should-be [(car-with :speed 2 :position 22) (car-with :speed 1 :position 11)])
+	(def cars [(car-with :speed 1 :position 20) (car-with :speed 1 :position 10)])
+	(is (= cars-should-be (run-sim 1 cars))))
+	
+(deftest run-sim-2-tick
+	(def cars-should-be [(car-with :speed 3 :position 25) (car-with :speed 2 :position 13)])
+	(def cars [(car-with :speed 1 :position 20) (car-with :speed 1 :position 10)])
+	(is (= cars-should-be (run-sim 2 cars))))
+
+(deftest run-sim-3-tick
+	(def cars-should-be [(car-with :speed 4 :position 29) (car-with :speed 3 :position 16)])
+	(def cars [(car-with :speed 1 :position 20) (car-with :speed 1 :position 10)])
+	(is (= cars-should-be (run-sim 3 cars))))
+
