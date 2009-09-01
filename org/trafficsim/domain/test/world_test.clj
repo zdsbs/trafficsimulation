@@ -1,25 +1,6 @@
 (ns org.trafficsim.domain.test.world-test
   (:use clojure.contrib.test-is org.trafficsim.domain.world org.trafficsim.domain.car))
 
-(defn default-car []
-	(struct car :a 1 0 1 (struct behavior 10 5)))
-
-(defn car-with 
-	([key value]
-		(assoc (default-car) key value))
-	([key1 value1 key2 value2]
-		(assoc (car-with key1 value1) key2 value2)))
-
-(deftest car-with-test
-	(is (= (struct car :b 1 0 1 (struct behavior 10 5)) (car-with :name :b)))
-	(is (= (struct car :b 2 0 1 (struct behavior 10 5)) (car-with :name :b :position 2))))
-
-(deftest apply-new-speed-test 
-	(is (= (car-with :speed 2)) (apply-new-speed (car-with :speed 1) 2)))
-
-(deftest apply-new-speeds-test
-	(is (= [(car-with :speed 4) (car-with :speed 5)] (apply-new-speeds [(car-with :speed 1) (car-with :speed 2)] [4 5]))))
-
 (deftest sort-cars-by-position-test
 	(is (= () (sort-cars-by-position [])))
 	(is (= (seq [(car-with :name :a :position 1)]) (sort-cars-by-position [(car-with :name :a :position 1)])))
@@ -42,34 +23,6 @@
 	(is (= [IN-FRONT 3] (distances-between-cars (ordered-car-pair [(car-with :position 100) (car-with :position 97)]))))
 	(is (= [IN-FRONT 3 4] (distances-between-cars (ordered-car-pair [(car-with :position 100) (car-with :position 97) (car-with :position 93)])))))
 
-(deftest tick-loop-1-car-test
-	(def cars-should-be [(car-with :speed 2 :position 12)])
-	(def cars [(car-with :speed 1 :position 10)])
-	(def observable-world-state (observe-world cars))
-	(def speed-changes (all-speed-changes cars observable-world-state))
-	(def cars-with-new-positions (apply-car-reactions cars speed-changes))
-	(is (= cars-should-be cars-with-new-positions)))
-
-(deftest tick-loop-2-cars-not-in-correct-order
-	(def cars-should-be [(car-with :speed 2 :position 22) (car-with :speed 1 :position 11)])
-	(def cars (sort-cars-by-position [(car-with :speed 1 :position 10) (car-with :speed 1 :position 20)]))
-	(def observable-world-state (observe-world cars))
-	(def speed-changes (all-speed-changes cars observable-world-state))
-	(def cars-with-new-positions (apply-car-reactions cars speed-changes))
-	(is (= cars-should-be cars-with-new-positions)))
-
-(deftest car-tail-position
-	(is (= -15 (get-car-tail-position {:length 15 :position 0})))
-	(is (= 0 (get-car-tail-position {:length 15 :position 15}))))
-
-(deftest moving-car
-	(is (= 10 (get-new-car-head-position {:speed 8 :position 2})))
-	(is (= 6  (get-new-car-head-position {:speed -2 :position 8})))
-	(is (= 9  (get-new-car-head-position {:speed 0 :position 9}))))
-
-(deftest move-car-test
-	(is (= (car-with :position 2) (move-car (car-with :position 1 :speed 1)))))
-
 (deftest car-off-end-of-road
 	(is (keep-car? (car-with :position 1000 :length 1)))
 	(is (keep-car? (car-with :position 1001 :length 1)))
@@ -80,4 +33,11 @@
 	(is (= [(car-with :name :a :position 3)] (move-all-cars [(car-with :name :a :position 2)])))
 	(is (= [(car-with :name :a :position 2) (car-with :name :b :position 4)] (move-all-cars [(car-with :name :a :position 1) (car-with :name :b :position 3)])))
 	(is (= [(car-with :name :a :position 3)] (move-all-cars [(car-with :name :a :position 2) (car-with :name :b :position 1001)]))))
+
+(deftest all-speed-changes-test
+	(is (= (seq [2]) (all-speed-changes [(car-with :speed 1)] [IN-FRONT])))
+	(is (= (seq [2 1]) (all-speed-changes [(car-with :speed 1) (car-with :speed 1)] [IN-FRONT 10]))))
+	
+(deftest apply-new-speeds-test
+	(is (= [(car-with :speed 4) (car-with :speed 5)] (apply-new-speeds [(car-with :speed 1) (car-with :speed 2)] [4 5]))))
 	

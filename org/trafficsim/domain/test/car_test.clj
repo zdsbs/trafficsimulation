@@ -1,25 +1,31 @@
 (ns org.trafficsim.domain.test.car-test
   (:use clojure.contrib.test-is org.trafficsim.domain.car))
 
-(defn car-10-5 [name position speed]
-	(struct car name position 1 speed (struct behavior 10 5)))
-
-(defn car-speed [speed]
-	(car-10-5 :a 1 speed))
+(deftest car-with-test
+	(is (= (struct car :b 1 0 1 (struct behavior 10 5)) (car-with :name :b)))
+	(is (= (struct car :b 2 0 1 (struct behavior 10 5)) (car-with :name :b :position 2))))
 
 (deftest brake-test
-	(is (= 1 (brake 2 (car-speed 3)))))
+	(is (= 1 (get-new-slower-speed 2 (car-with :speed 3)))))
 
 (deftest accel-test
-	(is (= 5 (accel 2 (car-speed 3)))))
+	(is (= 5 (get-new-faster-speed 2 (car-with :speed 3)))))
 
-(deftest speed-change-test
-	(is (= 2 (speed-change (car-10-5 :a 1 1) 11)))
-	(is (= 1 (speed-change (car-10-5 :a 1 1) 10)))
-	(is (= 1 (speed-change (car-10-5 :a 1 1) 6)))
-	(is (= 2 (speed-change (car-10-5 :a 1 2) 5)))
-	(is (= 1 (speed-change (car-10-5 :a 1 2) 4))))
+(deftest get-new-target-speed-test
+	(is (= 2 (get-new-target-speed (car-with :speed  1) 11)))
+	(is (= 1 (get-new-target-speed (car-with :speed  1) 10)))
+	(is (= 1 (get-new-target-speed (car-with :speed  1) 6)))
+	(is (= 2 (get-new-target-speed (car-with :speed  2) 5)))
+	(is (= 1 (get-new-target-speed (car-with :speed  2) 4))))
 
-(deftest all-speed-changes-test
-	(is (= (seq [2]) (all-speed-changes [(car-speed 1)] [IN-FRONT])))
-	(is (= (seq [2 1]) (all-speed-changes [(car-speed 1) (car-speed 1)] [IN-FRONT 10]))))
+(deftest apply-new-speed-test 
+	(is (= (car-with :speed 2)) (apply-new-speed (car-with :speed 1) 2)))
+	
+(deftest move-car-test
+	(is (= (car-with :position 2) (move-car (car-with :position 1 :speed 1)))))
+
+
+(deftest car-tail-position
+	(is (= -15 (get-car-tail-position {:length 15 :position 0})))
+	(is (= 0 (get-car-tail-position {:length 15 :position 15}))))
+

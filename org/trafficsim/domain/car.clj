@@ -7,25 +7,38 @@
 (defstruct behavior :accel-dist :decel-dist)
 (defstruct car :name :position :length :speed :behavior)
 
+(defn default-car []
+	(struct car :a 1 0 1 (struct behavior 10 5)))
+
+(defn car-with 
+	([key value]
+		(assoc (default-car) key value))
+	([key1 value1 key2 value2]
+		(assoc (car-with key1 value1) key2 value2)))
+
 (defn 
-	#^{:doc "decrements the cars speed; does not modify the car, just returns the new speed"}
-	brake [dec {:keys [speed] :as car}]
+	get-new-slower-speed [dec {:keys [speed] :as car}]
 	(- speed dec))
 
 (defn
- 	#^{:doc "increments the cars speed; does not modify the car, just returns the new speed"}
-	accel [accel {:keys [speed] :as car}]
+	get-new-faster-speed [accel {:keys [speed] :as car}]
 	(+ speed accel))
 
 (defn 
-	#^{:doc "checks the cars distance versus its behavior and changes the speed accordingly; does not modify the car, just returns the new speed"}
-	speed-change [{:keys [behavior speed] :as car} distance]
+	get-new-target-speed [{:keys [behavior speed] :as car} distance]
 	(cond 
-		(< distance (:decel-dist behavior)) (brake 1 car)
-		(> distance (:accel-dist behavior)) (accel 1 car)
+		(< distance (:decel-dist behavior)) (get-new-slower-speed 1 car)
+		(> distance (:accel-dist behavior)) (get-new-faster-speed 1 car)
 		:else speed))
 
-(defn
-	#^{:doc "checks alls cars against their following distances and changes their speeds accordingly; does not modify the car, just returns the new speed"}
-	all-speed-changes [cars distances]
-	(map speed-change cars distances))
+(defn 
+	apply-new-speed [car new-speed]
+	(assoc car :speed new-speed))
+
+(defn 
+	move-car [car]
+	(assoc car :position (+ (car :position) (car :speed))))
+
+(defn 
+	get-car-tail-position [{:keys [position length]}]
+	(- position length))
