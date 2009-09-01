@@ -1,5 +1,6 @@
 (ns org.trafficsim.domain.world
 	(:use [org.trafficsim.domain.road] [org.trafficsim.domain.car])
+	(:import (java.util Comparator))
 )
 
 ;world knows about road and cars and their relationship
@@ -26,19 +27,17 @@
 				(conj pairs [(nums 0) (nums 1)])
 				(recur (subvec nums 1) (conj pairs [(nums 0) (nums 1)]))))))
 
-
-
 (defn
  	#^{:doc "sorts a vector of cars by position"}
 	sort-cars-by-position [cars]
-	(sort-by :position cars))
+ 	(sort #(- (:position %2) (:position %1)) cars))
 
 (defn 
-	#^{:doc "calculates the distance between a pair of cars;  THIS IS WRONG.  It needs to take into account the size of the cars!"}
+	#^{:doc "calculates the distance between a pair of cars"}
 	distance-between-two-cars [[car1 car2]]
 	(if (nil? car2)
 		IN-FRONT
-		(- (:position car1) (:position car2))))
+		(- (:position car1) (:length car1) (:position car2))))
 
 (defn 
 	#^{:doc "takes a set of pairs of cars, sorted, leader to the left"}
@@ -49,9 +48,6 @@
 	#^{:doc "given a car, calculates the position of the back of the car"}
 	get-car-tail-position [{:keys [position length]}]
 	(- position length))
-
-
-
 
 (defn 
 	#^{:doc "calculates the new position of a car; ; does not modify the car, just returns the new position"}
@@ -73,6 +69,16 @@
 	move-all-cars [input-cars]
 	(filter keep-car? (map move-car input-cars)))
 
+(defn observe-world [cars]
+	(def car-pairs (ordered-car-pair (vec cars)))
+	(distances-between-cars car-pairs))
+
+(defn get-car-reactions [cars observable-world-state]
+	(all-speed-changes cars observable-world-state))
+
+(defn apply-car-reactions [cars reactions]
+	(def cars-with-new-speeds (apply-new-speeds cars reactions))
+	(move-all-cars cars-with-new-speeds))
 
 
 (def 
