@@ -1,1 +1,0 @@
-(println *command-line-args*)
