@@ -17,13 +17,18 @@
 	(let [
 		observable-world-state (observe-world cars) 
 		speed-changes (all-speed-changes cars observable-world-state)]
-			(apply-car-reactions cars speed-changes)))
+		(apply-car-reactions cars speed-changes)))
 
-(defn run-sim [num-ticks initial-cars]
+(defn run-sim [num-ticks initial-cars & [side-effect]]
 	(loop [ticks-left num-ticks cars initial-cars]
+		(if (not (nil? side-effect))
+			(side-effect cars))
 		(if (= ticks-left 0) 
 			cars
 			(recur (dec ticks-left) (simulation-tick cars)))))
+
+
+
 
 (def 
 	#^{:doc "a mutable sequence of the world state; each item in the sequence represents the state of the world at that time 'tick'"}
