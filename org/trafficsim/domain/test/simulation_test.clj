@@ -34,4 +34,13 @@
 	(def cars-should-be [(car-with :speed 4 :position 29) (car-with :speed 3 :position 16)])
 	(def cars [(car-with :speed 1 :position 20) (car-with :speed 1 :position 10)])
 	(is (= cars-should-be (run-sim 3 cars))))
+	
+(deftest persistent-state-is-kept-track-of
+	(let [accum (make-accum)
+ 		  cars-should-be [[(car-with :speed 1 :position 20) (car-with :speed 1 :position 10)]
+						 [(car-with :speed 2 :position 22) (car-with :speed 1 :position 11)]
+						 [(car-with :speed 3 :position 25) (car-with :speed 2 :position 13)]]
+		  cars [(car-with :speed 1 :position 20) (car-with :speed 1 :position 10)]]
+		  (run-sim 2 cars (accum :update))
+		  (is (= cars-should-be ((accum :get))))))
 
