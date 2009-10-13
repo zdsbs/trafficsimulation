@@ -32,7 +32,3 @@
 		(if (= ticks-left 0) 
 			cars
 			(recur (dec ticks-left) (simulation-tick cars)))))
-
-
-
-

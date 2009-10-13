@@ -14,7 +14,9 @@
 	([key value]
 		(assoc (default-car) key value))
 	([key1 value1 key2 value2]
-		(assoc (car-with key1 value1) key2 value2)))
+		(assoc (car-with key1 value1) key2 value2))
+	([key1 value1 key2 value2 key3 value3]
+		(assoc (car-with key1 value1 key2 value2) key3 value3)))
 
 (defn 
 	get-new-slower-speed [dec {:keys [speed] :as car}]
