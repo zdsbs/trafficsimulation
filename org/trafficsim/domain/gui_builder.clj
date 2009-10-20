@@ -1,6 +1,6 @@
 (ns org.trafficsim.domain.gui-builder
 	(:use )
-	(:import (java.awt Color) (java.awt.event ActionListener) (javax.swing JFrame JPanel Timer) (java.lang System))
+	(:import (java.awt Color) (java.awt.event ActionListener) (javax.swing JFrame JPanel JButton Timer) (java.lang System))
 )
 
 (def ROAD_LEFT 100)
@@ -35,31 +35,60 @@
 
 (def curr-tick (atom 0))
 
-(defn create-gui [accumulator]
-	(def panel
-		(proxy[JPanel ActionListener]
-			[] ;arguments to the superclass constrctor (none here)
+(defn inc-tick [curr-tick accumulator]
+	(let [curr-count (count ((:get accumulator)))]
+		(if (< @curr-tick (- curr-count 1))
+			(swap! curr-tick inc))))
+
+(defn dec-tick [curr-tick]
+	(if (> @curr-tick 0)
+		(swap! curr-tick dec)))
+
+(defn add-action-listener [component f]
+	(.addActionListener component 
+		(proxy[ActionListener]
+			[]
+			(actionPerformed [e] (apply f)))))
+
+(defn create-panel [accumulator]
+	(proxy[JPanel ActionListener]
+		[] ;arguments to the superclass constrctor (none here)
+	
+		(paintComponent [graphics]
+			(proxy-super paintComponent graphics)
 		
-			(paintComponent [graphics]
-				(proxy-super paintComponent graphics)
-			
-				;paint the road
-				(draw-road graphics)
-			
-				;paint the cars
-				(doseq [car (((accumulator :get)) @curr-tick)] (draw-car graphics car))
-			)
-			
-			(actionPerformed [e]
-				(swap! curr-tick inc)
-				(.repaint this))))
+			;paint the road
+			(draw-road graphics)
+		
+			;paint the cars
+			(doseq [car (((accumulator :get)) @curr-tick)] (draw-car graphics car))
+		)
+		
+		(actionPerformed [e]
+			(inc-tick curr-tick accumulator)
+			(.repaint this))))
+		
+(defn add-button [panel name callback]
+	(let [button (new JButton name)]
+		(add-action-listener button callback)
+		(.add panel button)))
+
+(defn create-gui [accumulator]
+	(def panel (create-panel accumulator))
+	(def timer (Timer. 250 panel))
+	(add-button panel "<-" (fn [] (do (dec-tick curr-tick) (. panel repaint))))
+	(add-button panel "Play" #(.start timer))
+	(add-button panel "->"(fn [] (do (inc-tick curr-tick accumulator) (. panel repaint))))
+	(add-button panel "Stop" #(.stop timer))
+	(add-button panel "Reset" (fn []
+		(do
+			(reset! curr-tick 0)
+			(. panel repaint))))
 	
 	(doto (JFrame. "Traffic Simulation")
 		(.add panel)
 		(.setResizable false)
 		(.setSize 1200, 400)
 		(.setVisible true)
-		(.setDefaultCloseOperation (JFrame/EXIT_ON_CLOSE)))
-
-	(.start (Timer. 250 panel)))
+		(.setDefaultCloseOperation (JFrame/EXIT_ON_CLOSE))))
 
