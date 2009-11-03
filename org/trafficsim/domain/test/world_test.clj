@@ -1,11 +1,8 @@
 (ns org.trafficsim.domain.test.world-test
   (:use clojure.contrib.test-is org.trafficsim.domain.world org.trafficsim.domain.car))
 
-(deftest sort-cars-by-position-test
-	(is (= () (sort-cars-by-position [])))
-	(is (= (seq [(car-with :name :a :head-position 1)]) (sort-cars-by-position [(car-with :name :a :head-position 1)])))
-	(is (= (seq [(car-with :name :b :head-position 2) (car-with :name :a :head-position 1)]) (sort-cars-by-position [(car-with :name :a :head-position 1) (car-with :name :b :head-position 2)])))
-	(is (= (seq [(car-with :name :b :head-position 2) (car-with :name :a :head-position 1)]) (sort-cars-by-position [(car-with :name :b :head-position 2) (car-with :name :a :head-position 1)]))))
+(deftest move-car-test
+	(is (= (car-with :head-position 2) (move-car (car-with :head-position 1 :speed 1)))))
 
 (deftest distance-between-two-cars-test
 	(is (= IN-FRONT (distance-between-two-cars [(car-with :head-position 1) nil])))
@@ -13,10 +10,7 @@
 	(is (= 0 (distance-between-two-cars [(car-with :head-position 5 :length 5) (car-with :head-position 0)]))))
 
 (deftest ordered-car-pair-test
-	(is (= [] (ordered-car-pair [1])))
-	(is (= [[1 2]] (ordered-car-pair [1 2])))
-	(is (= [[1 2] [2 3]] (ordered-car-pair [1 2 3])))
-	(is (= [[1 2] [2 3] [3 4]] (ordered-car-pair [1 2 3 4]))))
+	(is (= [[1 2] [2 3]] (ordered-car-pair [1 2 3]))))
 
 (deftest distances-between-cars-test
 	(is (= [IN-FRONT] (distances-between-cars (ordered-car-pair [(car-with :head-position 1)]))))

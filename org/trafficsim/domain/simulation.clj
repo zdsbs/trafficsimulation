@@ -8,13 +8,6 @@
 		 :reset #(reset! c [])
 		 :get #(deref c)}))
 
-(defn observe-world [cars]
-	(let [car-pairs (ordered-car-pair (vec cars))]
-		(distances-between-cars car-pairs)))
-
-(defn get-car-reactions [cars observable-world-state]
-	(all-speed-changes cars observable-world-state))
-
 (defn apply-car-reactions [cars reactions]
 	(let [cars-with-new-speeds (apply-new-speeds cars reactions)]
 		(move-all-cars cars-with-new-speeds)))

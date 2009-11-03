@@ -8,18 +8,8 @@
 
 (defn 
 	#^{:doc "takes an ordered vector of cars and creates a vector of pairs of each car and the car in front of it"}
-	ordered-car-pair [inums]
-	(if (= 1 (count inums))
-		[]
-		(loop [nums inums pairs []]
-			(if (= 2 (count nums))
-				(conj pairs [(nums 0) (nums 1)])
-				(recur (subvec nums 1) (conj pairs [(nums 0) (nums 1)]))))))
-
-(defn
- 	#^{:doc "sorts a vector of cars by position"}
-	sort-cars-by-position [cars]
- 	(sort #(- (:head-position %2) (:head-position %1)) cars))
+	ordered-car-pair [cars]
+		(partition 2 1 cars))
 
 (defn 
 	#^{:doc "calculates the distance between a pair of cars"}
@@ -35,8 +25,8 @@
 
 (defn
 	#^{:doc "checks alls cars against their following distances and changes their speeds accordingly; does not modify the car, just returns the new speed"}
-	all-speed-changes [cars distances]
-	(map get-new-target-speed cars distances))
+	all-speed-changes [cars observable-entities]
+	(map get-new-target-speed cars observable-entities))
 
 (defn 
 	#^{:doc "applies a vector of new speeds to a vector of cars.  The vectors need to be the same size and in the same order."}
@@ -50,9 +40,15 @@
 	(<= (get-car-tail-position car) (road :length)))
 
 (defn 
+	move-car [car]
+	(assoc car :head-position (+ (car :head-position) (car :speed))))
+
+(defn 
 	#^{:doc "move all cars according to their speeds"}
 	move-all-cars [input-cars]
 	(filter keep-car? (map move-car input-cars)))
 
-
+(defn observe-world [cars]
+	(let [car-pairs (ordered-car-pair (vec cars))]
+		(distances-between-cars car-pairs)))
 
