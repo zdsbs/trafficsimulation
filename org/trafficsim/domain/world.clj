@@ -19,14 +19,14 @@
 (defn
  	#^{:doc "sorts a vector of cars by position"}
 	sort-cars-by-position [cars]
- 	(sort #(- (:position %2) (:position %1)) cars))
+ 	(sort #(- (:head-position %2) (:head-position %1)) cars))
 
 (defn 
 	#^{:doc "calculates the distance between a pair of cars"}
 	distance-between-two-cars [[car1 car2]]
 	(if (nil? car2)
 		IN-FRONT
-		(- (:position car1) (:length car1) (:position car2))))
+		(- (:head-position car1) (:length car1) (:head-position car2))))
 
 (defn 
 	#^{:doc "takes a set of pairs of cars, sorted, leader to the left"}

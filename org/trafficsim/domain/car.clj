@@ -5,7 +5,7 @@
 	IN-FRONT (. Integer MAX_VALUE))
 
 (defstruct behavior :accel-dist :decel-dist)
-(defstruct car :name :position :length :speed :behavior)
+(defstruct car :name :head-position :length :speed :behavior)
 
 (defn default-car []
 	(struct car :a 1 0 1 (struct behavior 10 5)))
@@ -39,8 +39,8 @@
 
 (defn 
 	move-car [car]
-	(assoc car :position (+ (car :position) (car :speed))))
+	(assoc car :head-position (+ (car :head-position) (car :speed))))
 
 (defn 
-	get-car-tail-position [{:keys [position length]}]
-	(- position length))
+	get-car-tail-position [{:keys [head-position length]}]
+	(- head-position length))

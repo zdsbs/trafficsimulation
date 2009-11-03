@@ -3,7 +3,7 @@
 
 (deftest car-with-test
 	(is (= (struct car :b 1 0 1 (struct behavior 10 5)) (car-with :name :b)))
-	(is (= (struct car :b 2 0 1 (struct behavior 10 5)) (car-with :name :b :position 2))))
+	(is (= (struct car :b 2 0 1 (struct behavior 10 5)) (car-with :name :b :head-position 2))))
 
 (deftest brake-test
 	(is (= 1 (get-new-slower-speed 2 (car-with :speed 3)))))
@@ -22,10 +22,10 @@
 	(is (= (car-with :speed 2)) (apply-new-speed (car-with :speed 1) 2)))
 	
 (deftest move-car-test
-	(is (= (car-with :position 2) (move-car (car-with :position 1 :speed 1)))))
+	(is (= (car-with :head-position 2) (move-car (car-with :head-position 1 :speed 1)))))
 
 
 (deftest car-tail-position
-	(is (= -15 (get-car-tail-position {:length 15 :position 0})))
-	(is (= 0 (get-car-tail-position {:length 15 :position 15}))))
+	(is (= -15 (get-car-tail-position {:length 15 :head-position 0})))
+	(is (= 0 (get-car-tail-position {:length 15 :head-position 15}))))
 

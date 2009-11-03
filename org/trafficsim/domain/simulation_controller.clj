@@ -3,6 +3,6 @@
 )
 
 (let [accum (make-accum)
-	  cars [(car-with :speed 1 :position 27 :length 15) (car-with :speed 1 :position 10 :length 15)]]
+	  cars [(car-with :speed 1 :head-position 27 :length 15) (car-with :speed 1 :head-position 10 :length 15)]]
 	  (future (run-sim 100 cars (accum :update)))
 	  (create-gui accum))
