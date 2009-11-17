@@ -50,6 +50,12 @@
 (defn get-car-infront-of [car other-cars]
 	(last (sort-cars-by-position (filter #(< (:head-position car) (get-car-tail-position %)) other-cars))))
 
+(defn get-car-behind [car other-cars]
+	(first (sort-cars-by-position (filter #(> (get-car-tail-position car) (:head-position %)) other-cars))))
+
+(defn get-cars-around [car other-cars]
+	(filter #(not (nil? %)) (seq [(get-car-behind car other-cars) (get-car-infront-of car other-cars)])))
+
 (defn 
 	get-new-target-speed-2 [{:keys [behavior speed position] :as car} observable-entities]
 	(cond 

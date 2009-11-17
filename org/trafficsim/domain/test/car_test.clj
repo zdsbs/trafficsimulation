@@ -25,10 +25,24 @@
 	(is (= 1 (get-new-target-speed (car-with :speed  2) 4))))
 	
 (deftest get-car-infront-of-test
-	(let [carA (car-with :head-position 3 :length 1)
-	  	  carB (car-with :head-position 15 :length 1)]
+	(let [carA (car-with :name :a :head-position 3 :length 1)
+	  	  carB (car-with :name :b :head-position 15 :length 1)]
 	 	  (is (= carB (get-car-infront-of (car-with :speed 1 :head-position 13) (seq [carA carB]))))
 	 	  (is (= carA (get-car-infront-of (car-with :speed 1 :head-position 1) (seq [carB carA]))))))
+
+(deftest get-car-behind-test
+	(let [carA (car-with :head-position 3 :length 1)
+	  	  carB (car-with :head-position 15 :length 1)]
+	 	  (is (= carA (get-car-behind (car-with :speed 1 :head-position 13) (seq [carA carB]))))
+	 	  (is (= carB (get-car-behind (car-with :speed 1 :head-position 23) (seq [carB carA]))))))
+
+(deftest get-cars-around-test
+	(let [carA (car-with :head-position 1 :name :a)
+	  	  carB (car-with :head-position 2 :name :b)
+		  carC (car-with :head-position 3 :name :c)]
+	 	  (is (= (seq [carB]) (get-cars-around carC (seq [carA carB]))))
+	 	  (is (= (seq [carA carC]) (get-cars-around carB (seq [carA carC]))))
+	))
 
 
 (deftest get-new-target-speed-2-test

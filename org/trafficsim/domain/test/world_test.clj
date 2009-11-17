@@ -34,4 +34,15 @@
 	
 (deftest apply-new-speeds-test
 	(is (= [(car-with :speed 4) (car-with :speed 5)] (apply-new-speeds [(car-with :speed 1) (car-with :speed 2)] [4 5]))))
-	
+
+(deftest observe-world-2-test
+	(let [carA (car-with :name :a :head-position 1)
+		  carB (car-with :name :b :head-position 2)
+		  carC (car-with :name :c :head-position 3)]
+		(is (= (seq [(struct observable-entities (sequence []))]) (observe-world-2 (seq [carA]))))
+		(is (= (seq [(struct observable-entities (seq [carB])) (struct observable-entities (seq [carA]))]) (observe-world-2 (seq [carA carB]))))
+		(is (= (seq 
+				[(struct observable-entities (seq [carB])) 
+				(struct observable-entities (seq [carA carC]))
+				(struct observable-entities (seq [carB]))]) 
+					(observe-world-2 (seq [carA carB carC]))))))

@@ -52,3 +52,10 @@
 	(let [car-pairs (ordered-car-pair (vec cars))]
 		(distances-between-cars car-pairs)))
 
+(defn remove-from [to-remove col] (remove #(= to-remove %) col))
+(defn get-other-cars [cars] (map #(remove-from % cars) cars))
+(defn get-other-cars-around [cars] (map get-cars-around cars (get-other-cars cars)))
+
+;TODO - Expand this to take in other observables, roads, etc.
+(defn observe-world-2 [cars]
+	(map #(struct observable-entities %) (get-other-cars-around cars)))
