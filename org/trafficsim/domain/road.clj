@@ -1,67 +1,69 @@
 (ns org.trafficsim.domain.road)
 
-(defstruct road :x :y :l :w)
-(road 10 10 10 10)
-(road :x 10 :y 10 :l 10 :w 10)
-(road 10 10 (size 10 10))
-
-(def width 10)
-(def length 100)
-
-(def intersection1)
-(def intersection2)
-(def intersection2)
-(def intersection2)
-(def intersection2)
-(def intersection2)
-
-(connect intesection1 intersection2 _ intersection3)
-
 next week (this week) we will write a drivable space generator
-(drivables_space 10 10 10 10909000)
+(drivables_space 100 10)
 
-(def e_w_segment [100 100])
-(def n_s_segment [10 100])
-(def intersection1 )
-(addTo intersection1 a b c)
-(addTo intersection2 c d)
-(addTo intersection3 a b d)
+(def stuff [
+[1 1 1]
+[1 0 1]
+])
 
+(defn cartesian-product
+  "All the ways to take one item from each sequence"
+  [& seqs]
+  (let [v-original-seqs (vec seqs)
+	step
+	(fn step [v-seqs]
+	(let [increment
+	(fn [v-seqs]
+	(loop [i (dec (count v-seqs)), v-seqs v-seqs]
+	(if (= i -1) nil
+	(if-let [rst (next (v-seqs i))]
+	(assoc v-seqs i rst)
+	(recur (dec i) (assoc v-seqs i (v-original-seqs i)))))))]
+	(when v-seqs
+	(cons (map first v-seqs)
+	(lazy-seq (step (increment v-seqs)))))))]
+	    (when (every? first seqs)
+	      (lazy-seq (step v-original-seqs)))))
 
-(addTo i a b)
+(defn all-space [num-roads road-width]
+	(let [space-size (fn space-size [num-roads road-width] (- (* 2 road-width num-roads) road-width))]
+			(let [size (space-size num-roads road-width)]
+				(cartesian-product (range 0 size) (range 0 size)))))
 
---------------|--------------
-      a              b
+(defn is-road-offset [road-width offset]
+		(mod (int (/ (+ road-width offset) road-width)) 2)) 
 
-(addTo i a b c)
+(defn is-road-coordinate [road-width coord-seq]
+	(or 
+		(is-road-offset road-width (first coord-seq)) 
+		(is-road-offset road-width (second coord-seq))))
 
+(is-road-coordinate 2 (seq [0 0])) - 1
+(is-road-coordinate 2 (seq [2 3])) - 0
+(is-road-coordinate 2 (seq [0 1])) - 1
+(is-road-coordinate 2 (seq [8 6])) - 1
 
-	a      ---       b
-	       ---
-	       ---
-	       --- c
-	       ---
-	       ---
-	       ---
-	       ---
- 	       ---
---------------|--------------
---------------|--------------
---------------|--------------
-      a      ---       b
-             ---
-             ---
-             --- c
-             ---
-             ---
-             ---
-             ---
-             ---
+[[] []  [] []  []]
+[[] nil [] nil []]
+[[] []  [] []  []]
+[[] nil [] nil []]
+[[] []  [] []  []]
 
+[
+[[] []  [] []  []]
+[[] []  [] []  []]
+[[] nil [] nil []]
+[[] []  [] []  []]
+[[] nil [] nil []]
+[[] []  [] []  []]
+]
 
-(addTo i d e nil c)
-
-
+[
+[1 1 1]
+[1 0 1]
+]
 ;1,000 pixels of road
 (def LENGTH 1000)
 
