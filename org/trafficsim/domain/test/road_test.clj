@@ -1,6 +1,8 @@
 (ns org.trafficsim.domain.test.road-test
   (:use clojure.contrib.test-is org.trafficsim.domain.road))
 
-(defmacro expect [val expr]
-	(list 'deftest (symbol (str val expr)) (list 'is (list '= val expr))))
-
+(deftest is-road-coordinate-test
+	(is (= 1 (is-road-coordinate 2 (seq [0 0]))))
+	(is (= 0 (is-road-coordinate 2 (seq [2 3]))))
+	(is (= 1 (is-road-coordinate 2 (seq [0 1]))))
+	(is (= 1 (is-road-coordinate 2 (seq [8 6])))))

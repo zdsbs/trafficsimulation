@@ -1,12 +1,12 @@
 (ns org.trafficsim.domain.road)
 
-next week (this week) we will write a drivable space generator
-(drivables_space 100 10)
+;next week (this week) we will write a drivable space generator
+;(drivables_space 100 10)
 
-(def stuff [
-[1 1 1]
-[1 0 1]
-])
+;(def stuff [
+;[1 1 1]
+;[1 0 1]
+;])
 
 (defn cartesian-product
   "All the ways to take one item from each sequence"
@@ -40,30 +40,8 @@ next week (this week) we will write a drivable space generator
 		(is-road-offset road-width (first coord-seq)) 
 		(is-road-offset road-width (second coord-seq))))
 
-(is-road-coordinate 2 (seq [0 0])) - 1
-(is-road-coordinate 2 (seq [2 3])) - 0
-(is-road-coordinate 2 (seq [0 1])) - 1
-(is-road-coordinate 2 (seq [8 6])) - 1
 
-[[] []  [] []  []]
-[[] nil [] nil []]
-[[] []  [] []  []]
-[[] nil [] nil []]
-[[] []  [] []  []]
 
-[
-[[] []  [] []  []]
-[[] []  [] []  []]
-[[] nil [] nil []]
-[[] []  [] []  []]
-[[] nil [] nil []]
-[[] []  [] []  []]
-]
-
-[
-[1 1 1]
-[1 0 1]
-]
 ;1,000 pixels of road
 (def LENGTH 1000)
 
