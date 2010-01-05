@@ -1,5 +1,5 @@
 (ns org.trafficsim.domain.test.simulation-test
-  (:use clojure.contrib.test-is org.trafficsim.domain.world org.trafficsim.domain.car org.trafficsim.domain.simulation))
+  (:use clojure.test org.trafficsim.domain.world org.trafficsim.domain.car org.trafficsim.domain.simulation))
 
 (deftest tick-loop-1-car-test
 	(def cars-should-be [(car-with :speed 2 :head-position 12)])

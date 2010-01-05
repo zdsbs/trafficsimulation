@@ -1,5 +1,5 @@
 (ns org.trafficsim.domain.test.road-test
-  (:use clojure.contrib.test-is org.trafficsim.domain.road))
+  (:use clojure.test org.trafficsim.domain.road))
 
 (deftest is-road-coordinate-test
 	(is (= 1 (is-road-coordinate 2 (seq [0 0]))))

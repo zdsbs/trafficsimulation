@@ -1,5 +1,5 @@
 (ns org.trafficsim.domain.test.car-test
-  (:use clojure.contrib.test-is org.trafficsim.domain.car))
+  (:use clojure.test org.trafficsim.domain.car))
 
 (deftest car-with-test
 	(is (= (struct car :b 1 0 1 (struct behavior 10 5)) (car-with :name :b)))

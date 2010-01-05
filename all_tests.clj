@@ -1,5 +1,5 @@
 (ns all-tests
-  (:use clojure.contrib.test-is 
+  (:use clojure.test 
 	clojure.contrib.find-namespaces
 	clojure.contrib.str-utils)
   (import (java.io File))

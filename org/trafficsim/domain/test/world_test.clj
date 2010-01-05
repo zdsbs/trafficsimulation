@@ -1,5 +1,5 @@
 (ns org.trafficsim.domain.test.world-test
-  (:use clojure.contrib.test-is org.trafficsim.domain.world org.trafficsim.domain.car))
+  (:use clojure.test org.trafficsim.domain.world org.trafficsim.domain.car))
 
 (deftest move-car-test
 	(is (= (car-with :head-position 2) (move-car (car-with :head-position 1 :speed 1)))))
