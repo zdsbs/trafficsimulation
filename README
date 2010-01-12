@@ -1,5 +1,6 @@
 This is mostly a learning project where we are attempting to learn Clojure.  The nominal goal of the project is to create a traffic simultion that move autonomous cars around one or more streets, using some concepts from agent based modelling.
 
 Things you can do right now:
+- run all-tests.clj to run all the tests
 - run simulation_controller.clj to run a small simulation of two cars on a single one lane road
 - call (space) in road.clj to create a data structure representing a grid road system
