@@ -2,9 +2,6 @@
 	(:use clojure.contrib.combinatorics clojure.walk)
 )
 
-;next week (this week) we will write a drivable space generator
-;(drivables_space 100 10)
-
 (defn space-size [num-roads road-width]
 	(- (* 2 road-width num-roads) road-width))
 
@@ -21,7 +18,7 @@
 		(is-road-offset road-width (second coord-seq))))
 
 ;1,000 pixels of road
-(def LENGTH 1000)
+;(def LENGTH 1000)
 
 ;right now roads only have length b/c we're limiting ourselves
 ;to one-lane roads.  In the future it might have other quantities

@@ -17,19 +17,19 @@
 	(.setColor graphics (Color/BLACK))
 	(.fillRect graphics ROAD_LEFT 150 ROAD_LENGTH ROAD_HEIGHT))
 
-(defn draw-top-tire [graphics {:keys [position length]}]
+(defn draw-top-tire [graphics {:keys [head-position length]}]
 	(.setColor graphics (Color/YELLOW))
-	(.fillRect graphics (+ ROAD_LEFT position 2) (+ ROAD_TOP CAR_TIRE_ROAD_OFFSET) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT)
-	(.fillRect graphics (+ ROAD_LEFT position (- length (+ CAR_TIRE_LENGTH 2))) (+ ROAD_TOP CAR_TIRE_ROAD_OFFSET) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT))
+	(.fillRect graphics (+ ROAD_LEFT head-position 2) (+ ROAD_TOP CAR_TIRE_ROAD_OFFSET) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT)
+	(.fillRect graphics (+ ROAD_LEFT head-position (- length (+ CAR_TIRE_LENGTH 2))) (+ ROAD_TOP CAR_TIRE_ROAD_OFFSET) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT))
 
-(defn draw-bottom-tire [graphics {:keys [position length]}]
+(defn draw-bottom-tire [graphics {:keys [head-position length]}]
 	(.setColor graphics (Color/YELLOW))
-	(.fillRect graphics (+ ROAD_LEFT position 2) (+ ROAD_TOP CAR_BODY_ROAD_OFFSET CAR_BODY_HEIGHT) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT)
-	(.fillRect graphics (+ ROAD_LEFT position (- length (+ CAR_TIRE_LENGTH 2))) (+ ROAD_TOP CAR_BODY_ROAD_OFFSET  CAR_BODY_HEIGHT) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT))
+	(.fillRect graphics (+ ROAD_LEFT head-position 2) (+ ROAD_TOP CAR_BODY_ROAD_OFFSET CAR_BODY_HEIGHT) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT)
+	(.fillRect graphics (+ ROAD_LEFT head-position (- length (+ CAR_TIRE_LENGTH 2))) (+ ROAD_TOP CAR_BODY_ROAD_OFFSET  CAR_BODY_HEIGHT) CAR_TIRE_LENGTH CAR_TIRE_HEIGHT))
 
-(defn draw-car [graphics {:keys [position length] :as car}]
+(defn draw-car [graphics {:keys [head-position length] :as car}]
 	(.setColor graphics (Color/WHITE))
-	(.fillRect graphics (+ ROAD_LEFT position) (+ ROAD_TOP CAR_BODY_ROAD_OFFSET) length CAR_BODY_HEIGHT)
+	(.fillRect graphics (+ ROAD_LEFT head-position) (+ ROAD_TOP CAR_BODY_ROAD_OFFSET) length CAR_BODY_HEIGHT)
 	(draw-top-tire graphics car)
 	(draw-bottom-tire graphics car))
 
@@ -48,7 +48,7 @@
 	(.addActionListener component 
 		(proxy[ActionListener]
 			[]
-			(actionPerformed [e] (apply f)))))
+			(actionPerformed [e] (f)))))
 
 (defn create-panel [accumulator]
 	(proxy[JPanel ActionListener]
